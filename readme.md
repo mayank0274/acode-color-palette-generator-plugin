@@ -8,8 +8,9 @@ Note:- Generated colour may be slightly different from actual color and it may b
 
 Type "Color Palette" in command pallete("..." icon in bottom toolbar) select a image from which you want to extract color and wait for response.
 
+![](https://github.com/mayank0274/acode-color-palette-generator-plugin/blob/main/usage-guide.gif)
+
 # 📬 Features request / Bug report
 
 Contact me on :-  sharma.mayank0274@gmail.com or create a issue in Github repo
 
-# Github repo link
