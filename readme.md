@@ -12,5 +12,5 @@ Type "Color Palette" in command pallete("..." icon in bottom toolbar) select a i
 
 # 📬 Features request / Bug report
 
-Contact me on :-  sharma.mayank0274@gmail.com or create a issue in Github repo
+ create a issue in Github repo
 
