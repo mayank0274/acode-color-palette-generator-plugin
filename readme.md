@@ -4,6 +4,12 @@ This Plugin is specially for Fronted Developers , it helps to generate color pal
 
 Note:- Generated colour may be slightly different from actual color and it may be possible that all Color in image are not listed in generated color palette
 
+# Latest version
+
+`1.0.4`
+
+• You can save pallete
+
 # Usage
 
 Type "Color Palette" in command pallete("..." icon in bottom toolbar) select a image from which you want to extract color and wait for response.
