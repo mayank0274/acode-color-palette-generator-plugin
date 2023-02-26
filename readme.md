@@ -6,9 +6,9 @@ Note:- Generated colour may be slightly different from actual color and it may b
 
 # Latest version
 
-`1.0.4`
+`1.0.6`
 
-• You can save pallete
+• Bug fix
 
 # Usage
 
