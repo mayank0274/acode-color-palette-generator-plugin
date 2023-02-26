@@ -5,7 +5,7 @@ const fs = acode.require("fs");
 const alert = acode.require("alert");
 const loader = acode.require("loader");
 import copy from "copy-to-clipboard";
-const fileBrowser = acode.require('fileBrowser')
+const fileBrowser = acode.require("fileBrowser");
 
 class colorpalette {
   async init($page) {
@@ -39,6 +39,16 @@ class colorpalette {
 
     this.$main.append(this.$heading);
     this.$heading.style.margin = "8px";
+    
+    this.$uploadBtn = tag("img",{
+      className : "uploadBtn",
+      src :"https://drive.google.com/uc?export=view&id=1FfVgzQNSHVa2C1imI8F6lnuTqGp-h9jp"
+    })
+    
+    this.$uploadBtn.style.width = "80%";
+    this.$uploadBtn.style.marginBottom = "10px";
+    
+    this.$main.append(this.$uploadBtn);
 
     this.$form = tag("form", {
       className: "form",
@@ -57,6 +67,7 @@ class colorpalette {
 
     this.$file.style.width = "90%";
     this.$file.style.padding = "8px";
+    this.$file.style.display = "none";
     this.$form.append(this.$file);
 
     this.$colors = tag("div", {
@@ -80,15 +91,15 @@ class colorpalette {
       id: "btn",
       textContent: "Save Pallete",
     });
-    
+
     this.$btn.style.width = "35%";
     this.$btn.style.padding = "5px";
     this.$btn.style.textAlign = "center";
     this.$btn.style.fontSize = "16px";
-    this.$btn.style.backgroundColor= "#ffffff";
-    this.$btn.style.color= "#000000";
-    this.$btn.style.borderRadius = "5px"
-    this.$btn.style.border = "1px solid #ffffff"
+    this.$btn.style.backgroundColor = "#ffffff";
+    this.$btn.style.color = "#000000";
+    this.$btn.style.borderRadius = "5px";
+    this.$btn.style.border = "1px solid #ffffff";
     this.$main.append(this.$btn);
 
     this.$canvas = tag("canvas", {
@@ -103,20 +114,25 @@ class colorpalette {
 
   async run() {
     this.$page.show();
-    
+
     const canvas = document.querySelector("#canvas");
     canvas.style.display = "none";
 
     const btn = document.querySelector("#btn");
-    btn.style.display = "none"
+    btn.style.display = "none";
 
     const fileData = document.querySelector(".file");
     
+     const uploadBtn = document.querySelector(".uploadBtn")
+     
+     uploadBtn.addEventListener("click",()=>{
+       fileData.click();
+     })
+
     // array for drawing rectangle colors
-    const myColor = new Array()
+    const myColor = new Array();
 
-
-   // insert color box
+    // insert color box
     function insert(src) {
       const colorBox = document.querySelector(".colorBox");
 
@@ -143,12 +159,13 @@ class colorpalette {
     // load last generated color from local storage
     getPrevColors();
 
-
-// post image
+    // post image
     fileData.addEventListener("change", () => {
-     //clear canvas for next turn
-const context = canvas.getContext('2d');
-context.clearRect(0, 0, canvas.width, canvas.height)
+      //clear canvas for next turn
+      const context = canvas.getContext("2d");
+      context.clearRect(0, 0, canvas.width, canvas.height);
+      // clear array for drawing next colors
+      myColor.length = 0;
 
       const file = fileData.files;
       const data = new FormData();
@@ -157,29 +174,26 @@ context.clearRect(0, 0, canvas.width, canvas.height)
 
       loader.create("loading", "Generating Colour");
 
-      fetch("https://image-color-extractor-a84a.onrender.com/getColor", {
+      fetch("https://image-color-extractor-rnue.onrender.com/getColor", {
         method: "POST",
         body: data,
       })
         .then((r) => r.json())
         .then((data) => {
           loader.destroy();
-          
-          // clear array for drawing next colors
-        myColor.length = 0;
-      
+
           const res = document.querySelector(".colorBox");
           const btn = document.querySelector("#btn");
-    btn.style.display = "block"
+          btn.style.display = "block";
           const colorArr = Array.from(data);
-    // add colors in local storage
+          // add colors in local storage
           localStorage.setItem("colors", JSON.stringify(colorArr));
           res.innerText = " ";
           for (let i = 0; i < colorArr.length; i++) {
             // alert(colorArr[i])
             insert(colorArr[i]);
             // make color array for drawing
-           myColor.push(colorArr[i]);
+            myColor.push(colorArr[i]);
           }
           // copy colors
           const colourOut = Array.from(document.querySelectorAll(".card"));
@@ -195,10 +209,12 @@ context.clearRect(0, 0, canvas.width, canvas.height)
           });
         });
     });
-    
+
     // function for getting colors
     function getPrevColors() {
-      let storedColors = JSON.parse(localStorage.getItem("colors"));
+      let storedColors = !JSON.parse(localStorage.getItem("colors"))
+        ? []
+        : JSON.parse(localStorage.getItem("colors"));
       const lastGenColor = Array.from(storedColors);
       const colorBox = document.querySelector(".colorBox");
 
@@ -224,13 +240,13 @@ context.clearRect(0, 0, canvas.width, canvas.height)
     // save pallete
 
     function savePallete() {
-     // alert("ok");
-    // alert(myColor.length);
+      // alert("ok");
+      // alert(myColor.length);
       var canvas = document.getElementById("canvas");
       var context = canvas.getContext("2d");
       context.font = "bold 14px Arial";
       context.textAlign = "center";
-      context.fillStyle = "#ffffff"
+      context.fillStyle = "#ffffff";
       context.fillText("Color Palette Generator", 160, 30);
       context.fillText(myColor[0], 30, 80);
       context.fillText(myColor[1], 100, 80);
@@ -254,32 +270,33 @@ context.clearRect(0, 0, canvas.width, canvas.height)
           context.fillRect(Rect.x, Rect.y, Rect.w, Rect.h);
         }
       }
-   
     }
-    
+
     // save btn
     btn.addEventListener("click", async () => {
       savePallete();
 
-const canvas = document.getElementById('canvas')
+      const canvas = document.getElementById("canvas");
 
-const myfile = await fileBrowser('folder', 'Select location to save pallete', true);
-const url = myfile.url;
+      const myfile = await fileBrowser(
+        "folder",
+        "Select location to save pallete",
+        true
+      );
+      const url = myfile.url;
 
-canvas.toBlob(async function(blob){
-  
-const imgName = `Colour pallete - ${new Date().getMilliseconds()}.png`
-const file = await fs(url).createFile(imgName,blob);
- //alert(file)
- if(file){
-   alert("Colour Palette Saved Successfully")
- }else{
-alert("Error in saving pallete")
- }
-  },'image/png');
-  
-   canvas.style.backgroundColor = "#ffffff"
+      canvas.toBlob(async function (blob) {
+        const imgName = `Colour pallete - ${new Date().getMilliseconds()}.png`;
+        const file = await fs(url).createFile(imgName, blob);
+        //alert(file)
+        if (file) {
+          alert("Colour Palette Saved Successfully");
+        } else {
+          alert("Error in saving pallete");
+        }
+      }, "image/png");
 
+      canvas.style.backgroundColor = "#ffffff";
     });
 
     this.$page.onhide = () => {
