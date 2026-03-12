@@ -1,0 +1,23 @@
+{
+  "name": "Color Palette Generator",
+  "version": "1.0.6",
+  "description": "Colour palette Generator for fronted developers",
+  "main": "src/main.js",
+  "repository": "https://github.com/mayank0274/acode-color-palette-generator-plugin",
+  "author": "Mayank Sharma",
+  "dependencies": {
+    "acode-plugin-types": "^1.11.7-patch.2",
+    "copy-to-clipboard": "^3.3.3",
+    "html-tag-js": "^2.4.15",
+    "node-vibrant": "^4.0.4"
+  },
+  "devDependencies": {
+    "esbuild": "^0.25.8",
+    "jszip": "^3.10.1"
+  },
+  "scripts": {
+    "dev": "node esbuild.config.mjs --serve",
+    "build": "node esbuild.config.mjs"
+  },
+  "browserslist": "cover 100%,not android < 5"
+}
