@@ -2,8 +2,9 @@
   "id": "acode.plugin.colorpalette",
   "name": "Color Palette Generator",
   "main": "dist/main.js",
-  "version": "1.0.6",
+  "version": "1.0.7",
   "readme": "readme.md",
+  "changelog": "changelog.md",
   "icon": "icon.png",
   "files": [],
   "author": {
